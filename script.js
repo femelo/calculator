@@ -61,6 +61,7 @@ document.addEventListener("keydown", (e) => {
             actOnClear();
             break;
         case "Period":
+        case "Comma":
             actOnDot();
             break;
         case "Esc":
@@ -93,8 +94,6 @@ operationButtons.forEach((button) => button.addEventListener(
 buttonEnter.addEventListener("click", () => {
     actOnEnter();
 });
-
-// For digit
 
 // Callbacks
 // Add new digit
@@ -139,18 +138,17 @@ function setOperation(newOperation) {
         state.currentOperand = !isNaN(value)? value : null;
         if (selectedOperation !== null) {
             executeOperation();
-            setDisplayValue(state.previousOperand);
         }
     } else {
         state.previousOperand = state.currentOperand;
         state.currentOperand = Number(getDisplayValue());
         executeOperation();
-        setDisplayValue(state.previousOperand);
     }
     // console.log("After:");
     // console.log(`Previous operand: ${state.previousOperand}`);
     // console.log(`Current  operand: ${state.currentOperand}`);
     // console.log(`Operation kept: ${newOperation}`);
+    setDisplayValue(state.previousOperand);
     selectedOperation = newOperation;
     newOperand = true;
 }
@@ -263,10 +261,10 @@ function actOnBack() {
     setDisplayValue(value);
 }
 
+// Functions for controls
 function actOnEnter() {
     if (selectedOperation !== null && state.previousOperand !== null || state.currentOperand !== null) {
         setOperation(null);
-        setDisplayValue(state.previousOperand);
     }
     selectedOperation = null;
     dotToggled = false;

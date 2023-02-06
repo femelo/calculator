@@ -231,6 +231,13 @@ function executeOperation() {
     state.currentOperand = null;
 }
 
+// Round decimal number to 'n' decimal places
+function round(x, n = 0) {
+    const m = x.toString().split('.')[1].length;
+    return (m > n)? Math.round(x * (10 ** n)) / (10 ** n) : x;
+}
+
+// Functions for controls
 function actOnClear() {
     state.previousOperand = null;
     state.currentOperand = null;
@@ -264,7 +271,6 @@ function actOnBack() {
     setDisplayValue(value);
 }
 
-// Functions for controls
 function actOnEnter() {
     if (selectedOperation !== null && state.previousOperand !== null || state.currentOperand !== null) {
         setOperation(null);
@@ -286,9 +292,4 @@ function actOnDot() {
         setDisplayValue(value);
     }
     dotToggled = true;
-}
-
-function round(x, n = 0) {
-    const m = x.toString().split('.')[1].length;
-    return (m > n)? Math.round(x * (10 ** n)) / (10 ** n) : x;
 }

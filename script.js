@@ -265,6 +265,11 @@ function actOnBack() {
 function actOnEnter() {
     if (selectedOperation !== null && state.previousOperand !== null || state.currentOperand !== null) {
         setOperation(null);
+    } else {
+        const value = getDisplayValue();
+        if (value !== "." && value !== "OVERFLOW" && value !== "UNDEFINED") {
+            setDisplayValue(Number(value));
+        }
     }
     selectedOperation = null;
     dotToggled = false;

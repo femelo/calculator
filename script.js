@@ -46,6 +46,14 @@ digitButtons.forEach((button) => button.addEventListener(
     )
 );
 
+// Remove focus on mouse down event
+const allButtons = [...digitButtons, buttonDot, ...operationButtons, buttonBack, buttonClear, buttonEnter];
+allButtons.forEach((button) => button.addEventListener(
+        "mousedown",
+        (e) => e.preventDefault()
+    )
+);
+
 // For keys
 document.addEventListener("keydown", (e) => {
     e.preventDefault();

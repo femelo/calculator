@@ -69,15 +69,9 @@ document.addEventListener("keydown", (e) => {
         default:
             const key = e.key.toLowerCase();
             if (key === Number(key).toString()) {
-                // btn = document.querySelector(`button[id='${key}']`);
-                // console.log(btn);
-                // btn.click();
-                console.log(key);
                 addNewDigit(key);
             } else if (OPERATION_KEYS.includes(key)) {
                 let opKey = OPERATIONS[OPERATION_KEYS.findIndex((el) => el === key)];
-                // btn = document.querySelector(`button[id='${opKey}']`);
-                console.log(opKey);
                 setOperation(opKey);
             }
             break;
@@ -136,9 +130,9 @@ function addNewDigit(digit) {
 // Set operation
 function setOperation(newOperation) {
     const value = Number(getDisplayValue());
-    console.log("Before:");
-    console.log(`Previous operand: ${state.previousOperand}`);
-    console.log(`Current  operand: ${state.currentOperand}`);
+    // console.log("Before:");
+    // console.log(`Previous operand: ${state.previousOperand}`);
+    // console.log(`Current  operand: ${state.currentOperand}`);
     if (state.previousOperand === null) {
         state.previousOperand = !isNaN(value)? value : null;
     } else if (state.currentOperand === null) {
@@ -153,10 +147,10 @@ function setOperation(newOperation) {
         executeOperation();
         setDisplayValue(state.previousOperand);
     }
-    console.log("After:");
-    console.log(`Previous operand: ${state.previousOperand}`);
-    console.log(`Current  operand: ${state.currentOperand}`);
-    console.log(`Operation kept: ${newOperation}`);
+    // console.log("After:");
+    // console.log(`Previous operand: ${state.previousOperand}`);
+    // console.log(`Current  operand: ${state.currentOperand}`);
+    // console.log(`Operation kept: ${newOperation}`);
     selectedOperation = newOperation;
     newOperand = true;
 }
@@ -175,7 +169,6 @@ function getDisplayValue() {
 // Set display value
 function setDisplayValue(newValue) {
     let value;
-    console.log(newValue);
     if (typeof(newValue) !== "string") {
         value = newValue.toString();
     } else {
@@ -185,7 +178,6 @@ function setDisplayValue(newValue) {
         value = "UNDEFINED";
     }
     if (value.length > DIGIT_LIMIT) {
-        console.log(value);
         let [integer, decimal] = value.split('.');
         if (integer.length > DIGIT_LIMIT - 1) {
             value = "OVERFLOW";

@@ -14,6 +14,7 @@ const buttonEnter = document.querySelector("button[id=enter]");
 // Global variables
 const OPERATIONS = ["multiply", "divide", "add", "subtract", "exponentiate", "logarithm"];
 const OPERATION_KEYS = ['*', '/', "+", "-", 'e', "l"];
+const DIGIT_LIMIT = 20;
 const state = {
     "previousOperand": null,
     "currentOperand": null
@@ -47,6 +48,7 @@ digitButtons.forEach((button) => button.addEventListener(
 
 // For keys
 document.addEventListener("keydown", (e) => {
+    e.preventDefault();
     switch(e.code) {
         case "Enter":
             actOnEnter();
@@ -62,13 +64,21 @@ document.addEventListener("keydown", (e) => {
             actOnDot();
             break;
         case "Esc":
+        case "Tab":
             break;
         default:
             const key = e.key.toLowerCase();
             if (key === Number(key).toString()) {
+                // btn = document.querySelector(`button[id='${key}']`);
+                // console.log(btn);
+                // btn.click();
+                console.log(key);
                 addNewDigit(key);
             } else if (OPERATION_KEYS.includes(key)) {
-                setOperation(OPERATIONS[OPERATION_KEYS.findIndex((el) => el === key)]);
+                let opKey = OPERATIONS[OPERATION_KEYS.findIndex((el) => el === key)];
+                // btn = document.querySelector(`button[id='${opKey}']`);
+                console.log(opKey);
+                setOperation(opKey);
             }
             break;
     }
@@ -96,14 +106,14 @@ buttonEnter.addEventListener("click", () => {
 // Add new digit
 function addNewDigit(digit) {
     let value = getDisplayValue();
-    if (value.length === 21) {
-        return;
-    }
     if (newOperand) {
         newOperand = false;
         value = ".";
     }
-    if (value === "." || value === "OVERFLOW") {
+    if (value.length === DIGIT_LIMIT) {
+        return;
+    }
+    if (value === "." || value === "OVERFLOW." || value === "UNDEFINED.") {
         value = `${digit}.`;
     } else {
         if (value.slice(-1) === '.') {
@@ -125,18 +135,28 @@ function addNewDigit(digit) {
 
 // Set operation
 function setOperation(newOperation) {
+    const value = Number(getDisplayValue());
+    console.log("Before:");
+    console.log(`Previous operand: ${state.previousOperand}`);
+    console.log(`Current  operand: ${state.currentOperand}`);
     if (state.previousOperand === null) {
-        state.previousOperand = Number(getDisplayValue());
+        state.previousOperand = !isNaN(value)? value : null;
     } else if (state.currentOperand === null) {
-        state.currentOperand = Number(getDisplayValue());
-        executeOperation();
-        setDisplayValue(state.previousOperand);
+        state.currentOperand = !isNaN(value)? value : null;
+        if (selectedOperation !== null) {
+            executeOperation();
+            setDisplayValue(state.previousOperand);
+        }
     } else {
         state.previousOperand = state.currentOperand;
         state.currentOperand = Number(getDisplayValue());
         executeOperation();
         setDisplayValue(state.previousOperand);
     }
+    console.log("After:");
+    console.log(`Previous operand: ${state.previousOperand}`);
+    console.log(`Current  operand: ${state.currentOperand}`);
+    console.log(`Operation kept: ${newOperation}`);
     selectedOperation = newOperation;
     newOperand = true;
 }
@@ -155,15 +175,32 @@ function getDisplayValue() {
 // Set display value
 function setDisplayValue(newValue) {
     let value;
+    console.log(newValue);
     if (typeof(newValue) !== "string") {
         value = newValue.toString();
     } else {
         value = newValue;
     }
-    if (value.length > 21) {
-        value = "OVERFLOW";
+    if (value === "Infinity" || value === "NaN") {
+        value = "UNDEFINED";
     }
-    display.textContent = value.includes('.')? value : value + '.';
+    if (value.length > DIGIT_LIMIT) {
+        console.log(value);
+        let [integer, decimal] = value.split('.');
+        if (integer.length > DIGIT_LIMIT - 1) {
+            value = "OVERFLOW";
+        } else {
+            let n = DIGIT_LIMIT - 1 - integer.length;
+            value = round(Number(value), n).toString();
+        }
+    }
+    if (value !== "OVERFLOW" && value !== "UNDEFINED" && value.includes("e")) {
+        value = "0.";
+    }
+    if (!value.includes('.')) {
+        value += '.';
+    }
+    display.textContent = value;
 }
 
 // Execute operation
@@ -212,12 +249,19 @@ function actOnClear() {
 
 function actOnBack() {
     let value = getDisplayValue();
-    if (value !== "." && value !== "OVERFLOW") {
+    if (value !== "." && value !== "OVERFLOW." && value !== "UNDEFINED.") {
         if (value.slice(-1) === '.') {
             dotToggled = false;
             value = value.slice(0, -2) + '.';
         } else {
             value = value.slice(0, -1);
+        }
+        if (selectedOperation === null) {
+            if (!newOperand) {
+                state.previousOperand = value !== '.'? Number(value) : 0;
+            } else {
+                state.currentOperand = value !== '.'? Number(value) : null;
+            }
         }
     } else if (value === ".") {
         dotToggled = false;
@@ -228,7 +272,7 @@ function actOnBack() {
 }
 
 function actOnEnter() {
-    if (state.previousOperand !== null || state.currentOperand !== null) {
+    if (selectedOperation !== null && state.previousOperand !== null || state.currentOperand !== null) {
         setOperation(null);
         setDisplayValue(state.previousOperand);
     }
@@ -244,4 +288,9 @@ function actOnDot() {
         setDisplayValue(value);
     }
     dotToggled = true;
+}
+
+function round(x, n = 0) {
+    const m = x.toString().split('.')[1].length;
+    return (m > n)? Math.round(x * (10 ** n)) / (10 ** n) : x;
 }

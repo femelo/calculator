@@ -19,7 +19,7 @@ html, body {
     background-color: rgb(50, 50, 50);
     /* height: 30vh;
     height: calc(var(--vh, 1vh) * 30); */
-    width: 35vw;
+    width: 40vw;
     padding: 20px 20px;
 }
 
@@ -35,8 +35,8 @@ html, body {
     /* min-width: 25vw; */
     flex-basis: 2.5vh;
     background-color: rgb(170, 190, 150);
-    font-family: 'Seven segment', 'Lucida Console', monospace;
-    font-size: 48px;
+    font-family: 'Segment7', 'Lucida Console', monospace;
+    font-size: 3.5vw;
     color: black;
     text-align: right;
     padding-right: 4px;
@@ -65,7 +65,7 @@ button {
     border-radius: 10px;
     min-width: 5vw;
     font-family: 'Lucida Console', monospace;
-    font-size: 24px;
+    font-size: 1.5vw;
 }
 
 button:hover {

@@ -1,0 +1,73 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    width: 100vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    border-radius: 10px;
+    background-color: rgb(50, 50, 50);
+    /* height: 30vh;
+    height: calc(var(--vh, 1vh) * 30); */
+    width: 35vw;
+    padding: 20px 20px;
+}
+
+.display-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-bottom: 10px;
+}
+
+.display {
+    flex-grow: 1;
+    /* min-width: 25vw; */
+    flex-basis: 2.5vh;
+    background-color: rgb(170, 190, 150);
+    font-family: 'Seven segment', 'Lucida Console', monospace;
+    font-size: 48px;
+    color: black;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    gap: 1vw;
+}
+
+.buttons-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1vh;
+}
+
+button {
+    background-color: rgb(50, 50, 50);;
+    color: white;
+    border: solid 1px white;
+    border-radius: 10px;
+    min-width: 5vw;
+    font-family: 'Lucida Console', monospace;
+    font-size: 24px;
+}
+
+button:hover {
+    background-color: rgb(100, 100, 100);
+}

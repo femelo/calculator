@@ -64,7 +64,7 @@ document.addEventListener("keydown", (e) => {
         case "Comma":
             actOnDot();
             break;
-        case "Esc":
+        case "Escape":
         case "Tab":
             break;
         default:
@@ -166,6 +166,9 @@ function getDisplayValue() {
 
 // Set display value
 function setDisplayValue(newValue) {
+    if (newValue === null) {
+        return;
+    }
     let value;
     if (typeof(newValue) !== "string") {
         value = newValue.toString();
